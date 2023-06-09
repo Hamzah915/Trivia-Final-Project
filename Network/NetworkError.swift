@@ -10,6 +10,7 @@ enum NetworkError :String{
     case dataNotFoundError
     case parsingError
     case invalidUrlError
+    case dataTimeout
 }
 
 extension NetworkError : LocalizedError {
@@ -18,6 +19,8 @@ extension NetworkError : LocalizedError {
         case .dataNotFoundError:return NSLocalizedString("API Failed to give data", comment: NetworkError.dataNotFoundError.rawValue)
         case .parsingError: return NSLocalizedString("Failed to parse API", comment: NetworkError.parsingError.rawValue)
         case .invalidUrlError: return NSLocalizedString("Invalid URL", comment: NetworkError.invalidUrlError.rawValue)
+        case .dataTimeout: return NSLocalizedString("Data Timed Out", comment:
+            NetworkError.dataTimeout.rawValue)
         }
     }
 }
