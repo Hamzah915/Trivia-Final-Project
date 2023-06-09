@@ -24,7 +24,7 @@ struct OptionsScreen: View {
             Button {
                 coordinator.goToGameScreen()
             } label: {
-                PrimaryButton(text: "Start Game")
+                PrimaryButton(text: "Go to Game")
             }
             
         }
