@@ -10,16 +10,23 @@ import SwiftUI
 struct EndGame: View {
     @EnvironmentObject var gameViewModel: GameScreenViewModel
     @EnvironmentObject var coordinator: Coordinator
+    
 
     var body: some View {
-//        if gameViewModel.reachedEnd == true {
+        ZStack{
+            Image("BackgroundImage").resizable().edgesIgnoringSafeArea(.all)
+
             VStack(spacing: 20) {
-                Text("Congratulations, you completed the game!🥳")
+                Group{
+                    Text("Congratulations, you completed the game!!!")
+                    
+                    Text("You scored \(gameViewModel.score) out of \(gameViewModel.length)")
+                }.foregroundColor(.white)
                 
-                Text("You scored \(gameViewModel.score) out of \(gameViewModel.length)")
+                Spacer()
                 Group{
                     Button {
-                        coordinator.goToGameScreen()
+                        coordinator.goToOptionsScreen()
                     } label: {
                         PrimaryButton(text: "Play again")
                     }
@@ -31,14 +38,18 @@ struct EndGame: View {
                     }
                     
                 }
-            }.foregroundColor(Color("AccentColor")).padding().frame(maxWidth: .infinity,maxHeight: .infinity).font(.title).fontWeight(.heavy)
+                
+            }.padding().frame(maxWidth: .infinity,maxHeight: .infinity).font(.title).fontWeight(.heavy)
                 .background(Color.blue.opacity(0.3))
                 .navigationBarBackButtonHidden(true)
+        }
 //        }else{
 //            HomeScreen()
 //        }
         
     }
+    
+    
 }
 
 struct EndGame_Previews: PreviewProvider {

@@ -14,36 +14,52 @@ struct GameAnswer: View {
     
     var green = Color(hue: 0.437, saturation: 0.711, brightness: 0.711)
     var red = Color(red: 0.71, green: 0.094, blue: 0.1)
-
+    
     var body: some View {
         HStack(spacing: 20){
             Image(systemName: "circle.fill").font(.caption)
             
             Text(answerModel.answer).bold()
             
-            if isSelected{
+            
+            if gameViewModel.answerSelected && isSelected && answerModel.isCorrect{
                 Spacer()
-
-                Image(systemName: answerModel.isCorrect ? "checkmark.circle.fill" : "x.circle.fill").foregroundColor(answerModel.isCorrect ? green : red)
+                Image(systemName: "checkmark.circle.fill")
+                    .foregroundColor(green)
+            } else if gameViewModel.answerSelected && isSelected && !answerModel.isCorrect {
+                Spacer()
+                Image(systemName: "x.circle.fill")
+                    .foregroundColor(red)
+            } else if gameViewModel.answerSelected && !isSelected && answerModel.isCorrect{
+                Spacer()
+                Image(systemName: "checkmark.circle.fill").foregroundColor(green)
             }
             
         }.navigationBarBackButtonHidden(true)
-        .padding().frame(maxWidth: .infinity, alignment: .leading)
-
-            .foregroundColor(gameViewModel.answerSelected ? (isSelected ? Color("AccentColor") : .gray) : Color("AccentColor"))
+        
+            .padding().frame(maxWidth: .infinity, alignment: .leading)
+        
+            .foregroundColor(gameViewModel.answerSelected ? (isSelected ? Color("AccentColor") : (answerModel.isCorrect ? green : .gray) ) : Color("AccentColor"))
+        
             .background(.white).cornerRadius(10)
         
-            .shadow(color: isSelected ? (answerModel.isCorrect ? green : red) : .gray, radius: 5, x: 0.5, y: 0.5).opacity(0.7)
+            .shadow(color: gameViewModel.answerSelected ? (isSelected && !answerModel.isCorrect ? red : (answerModel.isCorrect ? green : .gray)) : .gray, radius: 5, x: 0.5, y: 0.5).opacity(0.7)
         
-//            .shadow(color: isSelected ? Color("AccentColor"): .gray, radius: 5, x: 0.5, y: 0.5).opacity(0.7)
-
+        
+        
+        
+        
+        
         
             .onTapGesture {
-                if !gameViewModel.answerSelected == true{
+                if gameViewModel.answerSelected == false{
                     isSelected = true
                     gameViewModel.answerSelected = true
                     gameViewModel.selectAnswer(answer: answerModel)
+                }else{
+                    print(1234)
                 }
+                
             }
     }
 }

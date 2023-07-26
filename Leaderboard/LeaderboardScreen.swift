@@ -8,32 +8,35 @@
 import SwiftUI
 
 struct LeaderboardScreen: View {
-    var highScore = UserDefaults.standard.string(forKey: "com.ITC.Trivia.highScore")
+    @EnvironmentObject var gameViewModel: GameScreenViewModel
+    var optionsScreen: OptionsScreen
+
 
     var body: some View {
-        VStack{
-            Text(highScore ?? "default value")
-            
-            Button("High Score"){
-                UserDefaults.standard.set("SwiftUI", forKey: "com.ITC.iOSOfflineStorage.name")
-                
-//                let highScore = Score(highScore: <#T##String#>)
-                if let encodedData = try? JSONEncoder().encode(highScore){
-                    UserDefaults.standard.set(encodedData, forKey: "com.ITC.iOSOfflineStorage.PikachuObj")
-                }
-                
+        ZStack{
+            Image("BackgroundImage2").resizable().edgesIgnoringSafeArea(.all)
+            VStack{
+                Spacer(minLength: 10)
+                Group{
+                    Text("Last Game:").font(.title)
+                    Spacer()
+
+                    Text("Category - \(optionsScreen.getCatName()), Difficulty - \(optionsScreen.getDifficulty())")
+                    
+                    Text("Score: \(gameViewModel.getScore()) out of \(gameViewModel.getQuestionNumber())")
+                    
+//                    Text("Questions: \(gameViewModel.)")
+                    
+                }.fontWeight(.heavy).foregroundColor(.white).padding()
             }
         }
     }
 }
 
-struct HighScore_Previews: PreviewProvider {
+struct LeaderboardScreen_Previews: PreviewProvider {
     static var previews: some View {
-        LeaderboardScreen()
+        LeaderboardScreen(optionsScreen: OptionsScreen()).environmentObject(GameScreenViewModel(manager: NetworkManager()))
     }
 }
 
-struct Score : Codable{
-//    var id : UUID
-    let highScore : String
-}
+

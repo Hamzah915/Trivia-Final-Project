@@ -9,22 +9,23 @@ import Foundation
 
 // MARK: - GameDataModel
 struct GameDataModel: Decodable {
-    let responseCode: Int
+//    let responseCode: Int
     let results: [Result]
 
-    enum CodingKeys: String, CodingKey {
-        case responseCode = "response_code"
-        case results
-    }
+//    enum CodingKeys: String, CodingKey {
+//        case responseCode = "response_code"
+//        case results
+//    }
 }
 
 // MARK: - Result
 struct Result: Decodable {
-    let category: Category
-    let type: TypeEnum
-    let difficulty: Difficulty
-    let question, correctAnswer: String
-    let incorrectAnswers: [String]
+    let category: String
+    let type: String
+    let difficulty: String
+    let question: String
+    let correct_answer: String
+    let incorrect_answers: [String]
     
     var formattedQuestion: AttributedString{
         do{
@@ -37,10 +38,10 @@ struct Result: Decodable {
     
    
     
-    var answers: [AnswerModel]{
+    var answersModels: [AnswerModel]{
         do{
-            let correctAnswer = [AnswerModel(answer: try AttributedString (markdown: correctAnswer), isCorrect: true)]
-            let incorrectAnswers = try incorrectAnswers.map { answer in
+            let correctAnswer = [AnswerModel(answer: try AttributedString (markdown: correct_answer), isCorrect: true)]
+            let incorrectAnswers = try incorrect_answers.map { answer in
                 AnswerModel(answer: try AttributedString(markdown: answer), isCorrect: false)
             }
             let allAnswers = correctAnswer + incorrectAnswers
@@ -53,24 +54,24 @@ struct Result: Decodable {
     
    
 
-    enum CodingKeys: String, CodingKey {
-        case category, type, difficulty, question
-        case correctAnswer = "correct_answer"
-        case incorrectAnswers = "incorrect_answers"
-    }
+//    enum CodingKeys: String, CodingKey {
+//        case category, type, difficulty, question
+//        case correctAnswer = "correct_answer"
+//        case incorrectAnswers = "incorrect_answers"
+//    }
 }
 
-enum Category: String, Codable {
-    case generalKnowledge = "General Knowledge"
-}
-
-enum Difficulty: String, Codable {
-    case medium = "medium"
-}
-
-enum TypeEnum: String, Codable {
-    case multiple = "multiple"
-}
+//enum Category: String, Codable {
+//    case generalKnowledge = "General Knowledge"
+//}
+//
+//enum Difficulty: String, Codable {
+//    case medium = "medium"
+//}
+//
+//enum TypeEnum: String, Codable {
+//    case multiple = "multiple"
+//}
 
 extension Result:Identifiable{
     var id: UUID{UUID()}

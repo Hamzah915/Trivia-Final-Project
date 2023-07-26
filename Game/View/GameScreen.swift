@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct GameScreen: View {
+    var url:String?
+    init(url: String) {
+        self.url = url
+    }
     @State private(set) var isErrorOccured = false
     @EnvironmentObject var coordinator: Coordinator
     @EnvironmentObject var gameViewModel: GameScreenViewModel
@@ -17,8 +21,13 @@ struct GameScreen: View {
             VStack(spacing: 40){
                 HStack{
                     Text("Trivia").font(.title).foregroundColor(Color("AccentColor")).fontWeight(.heavy)
+
+                    Spacer()
+                    Text("\(gameViewModel.timerValue)")
+                        .font(.title).foregroundColor(Color("AccentColor")).fontWeight(.light)
                     Spacer()
                     Text("\(gameViewModel.index + 1) / \(gameViewModel.length)").font(.title).foregroundColor(Color("AccentColor")).fontWeight(.light)
+                    
                 }.navigationBarBackButtonHidden(true)
                 
                 ProgressBar(progress: gameViewModel.progress)
@@ -49,22 +58,17 @@ struct GameScreen: View {
                     } label: {
                         PrimaryButton(text: "Next", background:   Color("AccentColor"))
                     }
-
-                    
-                   
                 }else{
                     Button {
                         gameViewModel.coordinator = coordinator
                         gameViewModel.goToNextQuestion()
                     } label: {
                         PrimaryButton(text: "Next", background:  gameViewModel.answerSelected ? Color.purple : Color.gray)
-                    }.disabled(!gameViewModel.answerSelected)
+                    }
+                    .disabled(!gameViewModel.answerSelected)
                 
                     
                 }
-                
-                    
-
                 
                 Spacer()
                 
@@ -75,15 +79,33 @@ struct GameScreen: View {
     }
     
     func getAPIData()async{
-        await gameViewModel.getGameQuestions(withUrlString: APIEndPoint.endPointUrl)
+        guard let urlPoint = self.url else {
+            print("DEBUG: did not get url")
+            return}
+        await gameViewModel.getGameQuestions(withUrlString: urlPoint)
         if gameViewModel.networkError != nil {
             isErrorOccured = true
         }
     }
+    
+    func saveQuestions(_ questions: AttributedString) {
+        let attributedString = NSAttributedString(questions)
+        _ = attributedString.string
+        UserDefaults.standard.set(questions, forKey: "question")
+    }
+
+    func getQuestions() -> AttributedString {
+        guard let questionString = UserDefaults.standard.string(forKey: "question") else {
+            return AttributedString("")
+        }
+        
+        return AttributedString(questionString)
+    }
+    
 }
 
-struct GameScreen_Previews: PreviewProvider {
-    static var previews: some View {
-        GameScreen()
-    }
-}
+//struct GameScreen_Previews: PreviewProvider {
+//    static var previews: some View {
+//        GameScreen(url: "")
+//    }
+//}

@@ -19,7 +19,10 @@ class Coordinator: ObservableObject{
         navigationPath.append(MyScreen.OptionsScreen)
     }
     
-    func goToGameScreen(){
+    var url : String?
+    
+    func goToGameScreen(url:String){
+        self.url = url
         navigationPath.append(MyScreen.GameScreen)
     }
     
@@ -44,13 +47,13 @@ class Coordinator: ObservableObject{
         case .OptionsScreen:
             OptionsScreen()
         case .GameScreen:
-            GameScreen()
+            GameScreen(url: url ?? "")
         case .UIKitScreen:
             UIKitNavView()
         case .EndGameScreen:
             EndGame()
         case .LeaderboardScreen:
-            LeaderboardScreen()
+            LeaderboardScreen(optionsScreen: OptionsScreen())
         }
     }
 }
